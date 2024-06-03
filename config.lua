@@ -36,9 +36,32 @@ lvim.plugins = {
       vim.g.mkdp_filetypes = { "markdown" }
     end,
     ft = { "markdown" },
-  }
+  },
+  {
+    "ggandor/leap.nvim",
+    name = "leap",
+    config = function()
+      require("leap").add_default_mappings()
+    end,
+  },
+   {
+    "nvim-telescope/telescope-fzy-native.nvim",
+    build = "make",
+    event = "BufRead",
+  },
+   {
+    "nvim-pack/nvim-spectre",
+    event = "BufRead",
+    config = function()
+      require("spectre").setup()
+    end,
+  },
 }
 
+
+lvim.builtin.telescope.on_config_done = function(telescope)
+    pcall(telescope.load_extension, "telescope-fzy-native.nvim")
+end
 
 local ok, copilot = pcall(require, "copilot")
 if not ok then
@@ -69,4 +92,6 @@ vim.opt.wrap = true                             -- wrap lines
 
 vim.opt.foldmethod = "expr"                     -- default is "normal"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- default is ""
-vim.opt.foldenable = false                      -- if this option is true and fold method option is other than normal, every time a document is opened everything will be folded.
+vim.opt.foldenable = false -- if this option is true and fold method option is other than normal, every time a document is opened everything will be folded.
+vim.opt.autowrite = true -- automatically save before :next, :make etc
+
